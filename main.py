@@ -4,13 +4,13 @@ from NBAGame import NBAGame
 from NPBGame import NPBGame
 
 #NBAの情報取得
-# nba = NBAGame()
-# nba.getLiveInfo()
-# nba.saveLiveInfo()
+nba = NBAGame()
+nba.getLiveInfo()
+nba.saveLiveInfo()
 
 #NPBの情報取得
-npb = NPBGame()
+# npb = NPBGame()
 # npb.getLiveInfo()
-npb.saveLiveInfo()
+# npb.saveLiveInfo()
 
 

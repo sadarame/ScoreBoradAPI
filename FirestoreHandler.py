@@ -19,7 +19,10 @@ class FirestoreHandler:
         self.db = firestore.client()
 
         # メッセージ登録
-    def setLiveScoer(self, score):
+    def setLiveScoer(self, score_list):
         # 追加するデータ
         # データをFirestoreに追加
-        self.db.collection(self.collectionName).document().set(score)
+        # self.db.collection(self.collectionName).document().set(score)
+        for score in score_list:
+            self.db.collection(self.collectionName).add(score)
+       
