@@ -17,7 +17,7 @@ class Game:
         #firestore用のインスタンス
         self.firestoreHandler = FirestoreHandler(tableName)
 
-    def getLiveInfo(self):
+    def getLiveInfo(self):  
         raise NotImplementedError("Subclasses must implement getLiveInfo method")
 
     # ToDo:保存データを洗いがえできるよにする

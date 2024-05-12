@@ -6,8 +6,8 @@ import pytz
 class FirestoreHandler:
     _app_initialized = False
     
-    def __init__(self,collectionName):
-        self.collectionName = collectionName
+    def __init__(self):
+        
         script_dir = os.path.dirname(os.path.abspath(__file__))
         self.json_path = os.path.join(script_dir, 'scoreboard-651cf-firebase-adminsdk-obk22-368b90d493.json')
 
@@ -18,11 +18,17 @@ class FirestoreHandler:
     
         self.db = firestore.client()
 
-        # メッセージ登録
-    def setLiveScoer(self, score_list):
-        # 追加するデータ
+    def setLiveScoer(self, score_list,collectionName):
+
+        # データをFirestoreから削除
+        docs = self.db.collection(collectionName).stream()
+        for doc in docs:
+            doc.reference.delete()
+        
         # データをFirestoreに追加
-        # self.db.collection(self.collectionName).document().set(score)
         for score in score_list:
-            self.db.collection(self.collectionName).add(score)
+            self.db.collection(collectionName).add(score)
+
+
+       
        
