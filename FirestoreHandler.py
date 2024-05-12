@@ -1,7 +1,5 @@
 import os
 from firebase_admin import credentials, firestore, initialize_app
-from datetime import datetime
-import pytz 
 
 class FirestoreHandler:
     _app_initialized = False

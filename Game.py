@@ -81,12 +81,7 @@ class Game:
             status = game.select_one('.bb-score__link').text.strip()
             link = game.select_one('.bb-score__content')['href']
 
-            # スコアの取得
-            # TODO:取得できない可能性あり
-            # score_left = game.select_one('.bb-score__score--left').text.strip()
-            # score_center = game.select_one('.bb-score__score--center').text.strip()
-            # score_right = game.select_one('.bb-score__score--right').text.strip()
-            
+            # スコアの取得            
             score_left_element = game.select_one('.bb-score__score--left')
             score_left = score_left_element.text.strip() if score_left_element else ""
 
@@ -95,9 +90,7 @@ class Game:
 
             score_right_element = game.select_one('.bb-score__score--right')
             score_right = score_right_element.text.strip() if score_right_element else ""
-                
-            
-
+        
             # すでに同じ試合情報がリストに存在するかどうかを確認
             existing_game_info = next((game_info for game_info in self.game_list if game_info['venue'] == venue and
                                                                 game_info['home_team'] == home_team and
