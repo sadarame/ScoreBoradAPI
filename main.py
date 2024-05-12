@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3.7
 
-from Game1 import Game1 
+from Game import Game
 
 # #NBAの情報取得
 # nba = NBAGame()
@@ -12,8 +12,7 @@ from Game1 import Game1
 # npb.getLiveInfo()
 # npb.saveLiveInfo()
 
-
-game = Game1()
+game = Game()
 game.getNBALiveInfo()
 game.getNPBLiveInfo()
 
