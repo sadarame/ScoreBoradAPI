@@ -1,8 +1,9 @@
+#!/usr/local/bin/python3.7
 from FirestoreHandler import FirestoreHandler
 from nba_api.live.nba.endpoints import scoreboard
-import requests
 from bs4 import BeautifulSoup
 import datetime
+import requests
 import pytz
 
 class Game:

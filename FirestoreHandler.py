@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3.7
 import os
 from firebase_admin import credentials, firestore, initialize_app
 
