@@ -27,7 +27,3 @@ class FirestoreHandler:
         # データをFirestoreに追加
         for score in score_list:
             self.db.collection(collectionName).add(score)
-
-
-       
-       

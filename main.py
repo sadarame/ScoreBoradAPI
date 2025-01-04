@@ -1,9 +1,5 @@
 #!/usr/local/bin/python3.7
 from Game import Game
-import datetime
-import pytz
-import datetime
-import pytz
 
 # #NBAの情報取得
 # nba = NBAGame()
@@ -18,4 +14,5 @@ import pytz
 game = Game()
 game.getNBALiveInfo()
 game.getNPBLiveInfo()
+game.saveAllGameLiveInfo()
 

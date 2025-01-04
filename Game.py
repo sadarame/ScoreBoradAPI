@@ -10,6 +10,7 @@ class Game:
 
     # 試合情報を格納するリスト
     game_list = []
+    allgame_list = []
     collection_name_NBA = "TB_NBA_LIVE_SCORE"
     collection_name_NPB = "TB_NPB_LIVE_SCORE"
 
@@ -50,6 +51,18 @@ class Game:
             }
 
             self.game_list.append(game_info)
+            
+            # すべての試合の情報を格納
+            allgame = {
+                'homeTeamName': home_team_abbreviation,
+                'awayTeamName': away_team_abbreviation,
+                'homeTeamScore': home_score,
+                'awayTeamScore': away_score,
+                'status': game_status
+            }
+            
+            self.allgame_list.append(allgame)
+            
 
         for game_info in self.game_list:
             print(game_info)
@@ -114,6 +127,17 @@ class Game:
                 }
 
             self.game_list.append(game_info)
+            
+                        # すべての試合の情報を格納
+            allgame = {
+                'homeTeamName': home_team,
+                'awayTeamName': away_team,
+                'homeTeamScore': score_left,
+                'awayTeamScore': score_right,
+                'status': status
+            }
+            
+            self.allgame_list.append(allgame)
 
         # 取得した試合情報の表示
         for game_info in self.game_list:
@@ -125,3 +149,6 @@ class Game:
     # FireStoreに洗いがえで保存
     def saveLiveInfo(self,game_list,collection_name):
         self.firestoreHandler.setLiveScoer(game_list,collection_name)
+        
+    def saveAllGameLiveInfo(self):
+        self.firestoreHandler.setLiveScoer(self.allgame_list,"TB_ALL_LIVE_SCORE")
