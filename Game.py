@@ -56,8 +56,8 @@ class Game:
             allgame = {
                 'homeTeamName': home_team_abbreviation,
                 'awayTeamName': away_team_abbreviation,
-                'homeTeamScore': home_score,
-                'awayTeamScore': away_score,
+                'homeTeamScore': str(home_score),
+                'awayTeamScore': str(away_score),
                 'status': game_status
             }
             
