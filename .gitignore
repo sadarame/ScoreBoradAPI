@@ -1,3 +1,8 @@
+__pycache__/
+*.py[cod]
+.scoreboard.lock
+.scoreboard-releases/
+
 scoreboard-651cf-firebase-adminsdk-obk22-368b90d493.json
 .vscode/launch.json
 __pycache__/FirestoreHandler.cpython-310.pyc

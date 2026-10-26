@@ -1,0 +1,275 @@
+{
+  "leagues": [
+    {
+      "slug": "nba"
+    }
+  ],
+  "events": [
+    {
+      "id": "401909861",
+      "date": "2026-10-25T21:00Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "123",
+              "team": {
+                "abbreviation": "UTAH"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "132",
+              "team": {
+                "abbreviation": "LAL"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909862",
+      "date": "2026-10-25T22:00Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "109",
+              "team": {
+                "abbreviation": "BKN"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "136",
+              "team": {
+                "abbreviation": "IND"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909863",
+      "date": "2026-10-25T23:00Z",
+      "status": {
+        "clock": 0.0,
+        "displayClock": "0.0",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "102",
+              "team": {
+                "abbreviation": "NY"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "111",
+              "team": {
+                "abbreviation": "ORL"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909864",
+      "date": "2026-10-25T23:00Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "117",
+              "team": {
+                "abbreviation": "MIN"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "94",
+              "team": {
+                "abbreviation": "TOR"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909865",
+      "date": "2026-10-25T23:00Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "108",
+              "team": {
+                "abbreviation": "OKC"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "101",
+              "team": {
+                "abbreviation": "LAC"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909866",
+      "date": "2026-10-25T23:30Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "93",
+              "team": {
+                "abbreviation": "PHI"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "106",
+              "team": {
+                "abbreviation": "DET"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "401909867",
+      "date": "2026-10-26T01:00Z",
+      "status": {
+        "clock": 720.0,
+        "displayClock": "12:00",
+        "period": 4,
+        "type": {
+          "id": "3",
+          "name": "STATUS_FINAL",
+          "state": "post",
+          "completed": true,
+          "description": "Final",
+          "detail": "Final",
+          "shortDetail": "Final"
+        }
+      },
+      "competitions": [
+        {
+          "competitors": [
+            {
+              "homeAway": "home",
+              "score": "112",
+              "team": {
+                "abbreviation": "SAC"
+              }
+            },
+            {
+              "homeAway": "away",
+              "score": "123",
+              "team": {
+                "abbreviation": "MEM"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

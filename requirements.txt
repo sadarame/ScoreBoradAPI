@@ -1,10 +1,6 @@
+# Production currently runs Python 3.7. Keep compatible direct dependencies.
 beautifulsoup4==4.12.3
-certifi==2024.12.14
-charset-normalizer==3.4.1
-idna==3.10
-nba_api==1.6.1
-numpy==1.26.4
+firebase-admin==6.5.0
 pytz==2024.2
-requests==2.32.3
-soupsieve==2.6
-urllib3==2.3.0
+requests==2.31.0
+urllib3==1.26.20
