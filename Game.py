@@ -1,9 +1,12 @@
 """Validated score collectors, compatible with deployed Python 3.7."""
 import datetime
 import logging
+import re
 import time
+from urllib.parse import parse_qs, urlsplit
 import requests
 import pytz
+from SportsData import nba_metadata, espn_metadata, npb_metadata, JST
 from bs4 import BeautifulSoup
 
 NBA_URL = 'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
@@ -65,6 +68,18 @@ class Game:
             LOG.warning('NBA primary failed (%s); trying ESPN', type(exc).__name__)
             date = self.game_day().strftime('%Y%m%d')
             rows = self.parse_espn(self.fetch(ESPN_URL + '?dates=' + date))
+        for r in rows:
+            if r.get('phase') == 'scheduled':
+                r['homeTeamScore'] = r['awayTeamScore'] = ''
+            elif r['source'] == 'nba':
+                try:
+                    detail = self.fetch('https://cdn.nba.com/static/json/liveData/boxscore/boxscore_{}.json'.format(r['matchId']))['game']
+                    enriched = nba_metadata(detail)
+                    # Stats failure must never change the scoreboard's phase/score.
+                    for side in ('home', 'away'):
+                        r[side + 'Stats'] = enriched[side + 'Stats']
+                except Exception:
+                    LOG.warning('NBA boxscore unavailable: %s', r['matchId'])
         legacy = []
         for r in rows:
             legacy.append(dict(home_team=r['homeTeamName'], away_team=r['awayTeamName'],
@@ -97,6 +112,7 @@ class Game:
             rows.append(row(team_code(h['teamTricode']), team_code(a['teamTricode']),
                             h['score'], a['score'], g['gameStatusText'], 'NBA',
                             g['gameId'], 'nba', self.now))
+            rows[-1].update(nba_metadata(g))
         return self.deduplicate(rows)
 
     def parse_espn(self, data):
@@ -121,6 +137,7 @@ class Game:
             rows.append(row(team_code(h['team']['abbreviation']), team_code(a['team']['abbreviation']),
                             h.get('score', ''), a.get('score', ''), status, 'NBA',
                             event['id'], 'espn', self.now))
+            rows[-1].update(espn_metadata(event, h, a))
         return self.deduplicate(rows)
 
     @staticmethod
@@ -135,6 +152,46 @@ class Game:
     def getNPBLiveInfo(self):
         return self.parse_npb(self.fetch(NPB_URL, as_json=False))
 
+    @staticmethod
+    def _npb_week_explicitly_empty(soup, today):
+        tables = soup.select('table#wk_sche')
+        if len(tables) != 1:
+            return False
+        table = tables[0]
+        section = table.find_parent('section')
+        if section is None:
+            return False
+        # The year belongs to this schedule section, not a copyright/footer.
+        years = section.select('.bb-scheduleNavi__month')
+        if not years:
+            return False
+        for nav in years:
+            year = re.fullmatch(r'month_[hl](\d{4})', nav.get('id', ''))
+            label = nav.find('li', recursive=False)
+            if (not year or int(year[1]) != today.year or label is None
+                    or label.get_text(strip=True) != '{}年'.format(today.year)):
+                return False
+        matching = []
+        for row in table.select('tr'):
+            head = row.find('th', recursive=False)
+            match = re.fullmatch(r'(\d{1,2})月(\d{1,2})日（[月火水木金土日]）',
+                                 head.get_text(strip=True)) if head else None
+            if match and (int(match[1]), int(match[2])) == (today.month, today.day):
+                matching.append(row)
+        if len(matching) != 1:
+            return False
+        row = matching[0]
+        # Yahoo groups all games for one date in a tbody. Reject continuation
+        # rows, duplicate/contradictory game cells, and merely missing markup.
+        body = row.find_parent('tbody')
+        if body is None or len(body.find_all('tr', recursive=False)) != 1:
+            return False
+        cells = row.find_all('td', recursive=False)
+        return (len(cells) == 1
+                and 'bb-scheduleTable__data--nogame' in cells[0].get('class', [])
+                and cells[0].get_text(strip=True) == '試合はありません'
+                and row.select_one('a, .bb-scheduleTable__grid') is None)
+
     def parse_npb(self, html):
         soup = BeautifulSoup(html, 'html.parser')
         nav = soup.select_one('#day_nav')
@@ -145,6 +202,23 @@ class Game:
         previous = section.select_one('.bb-head01__naviItem--previous')
         expected = (today - datetime.timedelta(days=1)).isoformat()
         if previous is None or ('date=' + expected) not in previous.get('href', ''):
+            # After the season's last game Yahoo keeps the last daily card,
+            # even for a date-qualified request. Only explicit, dated weekly
+            # evidence may establish today's empty schedule.
+            heading = section.select_one('.bb-head01__title')
+            match = re.fullmatch(r'(\d{1,2})月(\d{1,2})日（[月火水木金土日]）',
+                                 heading.get_text(strip=True)) if heading else None
+            daily_date = None
+            try:
+                values = parse_qs(urlsplit(previous.get('href', '')).query).get('date', []) if previous else []
+                if len(values) == 1:
+                    daily_date = datetime.datetime.strptime(values[0], '%Y-%m-%d').date() + datetime.timedelta(days=1)
+            except ValueError:
+                pass
+            if (match and daily_date is not None and daily_date < today
+                    and (int(match[1]), int(match[2])) == (daily_date.month, daily_date.day)
+                    and self._npb_week_explicitly_empty(soup, today)):
+                return [], []
             raise ValueError('NPB daily page date mismatch')
         games = section.select('li.bb-score__item')
         if not games:
@@ -168,6 +242,9 @@ class Game:
             status = text('.bb-score__link')
             hs, aws = text('.bb-score__score--left', False), text('.bb-score__score--right', False)
             rows.append(row(home, away, hs, aws, status, 'NPB', link, 'yahoo', self.now))
+            rows[-1]['sport'] = 'baseball'
+            rows[-1]['homeDisplayName'], rows[-1]['awayDisplayName'] = home, away
+            rows[-1].update(npb_metadata(status, today))
             legacy.append(dict(venue=text('.bb-score__venue'), home_team=home, away_team=away,
                                status=status, link=link, score=dict(left=hs, center=text('.bb-score__score--center', False), right=aws),
                                update_date=self.now))

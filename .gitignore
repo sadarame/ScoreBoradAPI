@@ -6435,3 +6435,7 @@ env/lib/python3.10/site-packages/urllib3-2.2.0.dist-info/WHEEL
 env/lib/python3.10/site-packages/urllib3-2.2.0.dist-info/licenses/LICENSE.txt
 scoreboardAPI/*
 .DS_Store
+
+# Local verification environment
+.venv/
+__pycache__/

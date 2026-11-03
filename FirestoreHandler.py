@@ -43,6 +43,8 @@ class FirestoreHandler:
         merged = merge_scores([d.to_dict() for d in previous], updates, teams)
         replacements = [(all_ref, previous, merged)]
         for league, (legacy, rows) in updates.items():
+            if league not in ('NBA', 'NPB'):
+                continue
             ref = self.db.collection('TB_' + league + '_LIVE_SCORE')
             replacements.append((ref, list(ref.stream()), legacy))
         writes = sum(len(docs) + len(rows) for _, docs, rows in replacements) + len(updates) + len(failures)
@@ -63,3 +65,29 @@ class FirestoreHandler:
             batch.set(self.db.collection('TB_SCORE_UPDATE_STATUS').document(league),
                       dict(lastAttemptAt=now, status='error', error=error), merge=True)
         batch.commit()
+
+
+    def publish_team_stats(self, updates, now):
+        """Latest observed game and season record, independently from live scores."""
+        documents = {}
+        for league, (_, rows) in updates.items():
+            for row in sorted(rows, key=lambda r: r.get('startsAt') or now):
+                for side in ('home', 'away'):
+                    code = row[side + 'TeamName']
+                    key = hashlib.sha256((league + ':' + code).encode('utf-8')).hexdigest()
+                    data = dict(league=league, searchNM=code, updatedAt=now,
+                                teamName=row.get(side + 'DisplayName', code),
+                                side=side)
+                    if row.get(side + 'Record'):
+                        data['record'] = row[side + 'Record']
+                    if row.get(side + 'Form'):
+                        data['form'] = row[side + 'Form']
+                    if row.get('phase') != 'scheduled':
+                        data['lastMatch'] = row
+                    documents.setdefault(key, {}).update(data)
+        entries = list(documents.items())
+        for offset in range(0, len(entries), 400):
+            batch = self.db.batch()
+            for key, data in entries[offset:offset + 400]:
+                batch.set(self.db.collection('TB_TEAM_STATS').document(key), data, merge=True)
+            batch.commit()
