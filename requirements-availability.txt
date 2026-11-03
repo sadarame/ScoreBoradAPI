@@ -1,0 +1,5 @@
+# Optional independent worker; do not change the current production environment.
+# Python 3.7+ (use a dedicated virtualenv; pip resolves compatible transitive versions).
+pdfplumber==0.9.0
+requests==2.31.0
+pytz==2024.2
